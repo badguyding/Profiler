@@ -30,7 +30,6 @@ public class App
 	@Test
 	public void test_2(){
 		Profiler.enter( new ProfilerCallBack(){
-
 			@Override
 			public Object excute() {
 				try {
@@ -65,7 +64,6 @@ public class App
 
         public void call() throws InterruptedException{
             Profiler.enter(new ProfilerCallBack() {
-
                 @Override
                 public Object excute() {
                     try {

@@ -3,7 +3,6 @@ package com.liusoft.tools.profiler.AOPSupport;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.config.TypedStringValue;
@@ -12,7 +11,6 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 动态代理类生成工厂
@@ -51,27 +49,27 @@ public class MonitorBeanFactory {
                               Class proxyClass,
                               String[] monitorMethod,
                               String beanName,
-                              String timeUnitName){
+                              String timeUnitName) {
 
-        AbstractApplicationContext abstractApplicationContext = (AbstractApplicationContext)applicationContext;
+        AbstractApplicationContext abstractApplicationContext = (AbstractApplicationContext) applicationContext;
         BeanDefinition beanDefinition = abstractApplicationContext.getBeanFactory().getBeanDefinition(beanName);
         ConstructorArgumentValues constructorArgumentValues = beanDefinition.getConstructorArgumentValues();
-        List<ConstructorArgumentValues.ValueHolder> valueHolderList =  constructorArgumentValues.getGenericArgumentValues();
-        if( valueHolderList.isEmpty() ){
-            return getInstance(proxyClass,monitorMethod,timeUnitName);
+        List<ConstructorArgumentValues.ValueHolder> valueHolderList = constructorArgumentValues.getGenericArgumentValues();
+        if (valueHolderList.isEmpty()) {
+            return getInstance(proxyClass, monitorMethod, timeUnitName);
         }
 
         Object[] arguments = new Object[valueHolderList.size()];
         TypedStringValue typedStringValue = null;
-        for( int i = 0 ; i< valueHolderList.size();i++ ){
-            typedStringValue = (TypedStringValue)valueHolderList.get(i).getValue();
-            arguments[i]=typedStringValue.getValue();
+        for (int i = 0; i < valueHolderList.size(); i++) {
+            typedStringValue = (TypedStringValue) valueHolderList.get(i).getValue();
+            arguments[i] = typedStringValue.getValue();
         }
 
         Constructor[] constructors = proxyClass.getDeclaredConstructors();
         Constructor suitableConstructor = null;
-        for(Constructor constructor : constructors){
-            if( valueHolderList.size() == constructor.getGenericParameterTypes().length ){
+        for (Constructor constructor : constructors) {
+            if (valueHolderList.size() == constructor.getGenericParameterTypes().length) {
                 suitableConstructor = constructor;
                 break;
             }
@@ -80,13 +78,13 @@ public class MonitorBeanFactory {
         Enhancer enhancer = new Enhancer();
 
         //进行代理
-        enhancer.setSuperclass( proxyClass );
+        enhancer.setSuperclass(proxyClass);
         //使用两个拦截器的原因是 有的方法不做监控，用空拦截器实现，做监控的用ProfilerCGLIBProxy实现，   ProfilerCallbackFilter 中返回的索引，确定用哪个拦截器
-        enhancer.setCallbacks( new Callback[]{ NoOp.INSTANCE , new ProfilerCGLIBProxy(timeUnitName) } );
+        enhancer.setCallbacks(new Callback[]{NoOp.INSTANCE, new ProfilerCGLIBProxy(timeUnitName)});
         //生成代理实例
-        enhancer.setCallbackFilter( new ProfilerCallbackFilter( monitorMethod ) );
+        enhancer.setCallbackFilter(new ProfilerCallbackFilter(monitorMethod));
 
-        return enhancer.create(suitableConstructor.getParameterTypes(),arguments);
+        return enhancer.create(suitableConstructor.getParameterTypes(), arguments);
     }
 
 }

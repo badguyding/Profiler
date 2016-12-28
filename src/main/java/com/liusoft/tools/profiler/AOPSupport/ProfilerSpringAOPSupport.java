@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +21,7 @@ public class ProfilerSpringAOPSupport extends SpringBeanPostProcessor {
     private ApplicationContext applicationContext;
 
     private Map<String,String[]> monitorMethod;
+
     private MonitorBeanFactory monitorBeanFactory = new MonitorBeanFactory();
 
     private String timeUnit = null;
@@ -34,12 +34,9 @@ public class ProfilerSpringAOPSupport extends SpringBeanPostProcessor {
 
     @Override
     protected Object replaceMonitorBean(Object bean, String beanName) {
-
         //TODO 解决在bean没有空参数构造方法的情况
         //应该依赖于bean的定义去实例化Bean还不是直接new
-
-        Object monitorBean =  monitorBeanFactory.getInstance(applicationContext,bean.getClass(),monitorMethod.get(beanName),beanName,timeUnit);
-
+        Object monitorBean = monitorBeanFactory.getInstance(applicationContext, bean.getClass(), monitorMethod.get(beanName), beanName, timeUnit);
 
         applicationContext.getAutowireCapableBeanFactory().autowireBeanProperties(monitorBean, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME,false);
 

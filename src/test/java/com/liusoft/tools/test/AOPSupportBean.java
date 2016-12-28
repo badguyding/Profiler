@@ -1,7 +1,5 @@
 package com.liusoft.tools.test;
 
-import javax.annotation.Resource;
-
 /**
  * Created with IntelliJ IDEA.
  * User: liukunyang
@@ -22,17 +20,17 @@ public class AOPSupportBean {
 
 
     public void test2() throws InterruptedException{
-        Thread.sleep(300);
+        Thread.sleep(4000);
     }
 
     public void test3() throws InterruptedException{
-        Thread.sleep(200);
+        Thread.sleep(2000);
         test4();
     }
 
 
     public void test4() throws InterruptedException{
-        Thread.sleep(400);
+        Thread.sleep(4000);
     }
 
     public void setDependencyBean(DependencyBean dependencyBean) {

@@ -11,11 +11,11 @@ public class AOPSupportBean2 {
 
     private String name;
 
-    public AOPSupportBean2(String name){
-        this.name=name;
+    public AOPSupportBean2(String name) {
+        this.name = name;
     }
 
-    private  DependencyBean dependencyBean;
+    private DependencyBean dependencyBean;
 
     public void test1() throws InterruptedException {
         System.out.println("进入业务方方法");
@@ -24,17 +24,17 @@ public class AOPSupportBean2 {
     }
 
 
-    public void test2() throws InterruptedException{
+    public void test2() throws InterruptedException {
         Thread.sleep(300);
     }
 
-    public void test3() throws InterruptedException{
+    public void test3() throws InterruptedException {
         Thread.sleep(200);
         test4();
     }
 
 
-    public void test4() throws InterruptedException{
+    public void test4() throws InterruptedException {
         Thread.sleep(400);
     }
 
